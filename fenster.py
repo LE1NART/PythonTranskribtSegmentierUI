@@ -16,11 +16,13 @@ class fenster(tkinter.Tk):
         self.minsize(700,500)
         self.resizable(True, True)
         
+        #row- and columnconfiguration for the layout
         self.grid_rowconfigure(0,weight=1)
         self.grid_rowconfigure(1,weight=1000)
         self.grid_rowconfigure(2,weight=1)
         self.grid_columnconfigure(0,weight=1)
-
+    
+        #create all objectives in "private" functions
         self.__Main_Frame()
         self.__create_Menu()
         self.__create_Toolbar()
@@ -29,6 +31,7 @@ class fenster(tkinter.Tk):
         self.__create_StatusBar()
        
     def __Main_Frame(self):
+        #create the mainframe, in the mainframe is the textfield and the scrollbar for the textfield
         self.mainFrame = tkinter.Frame(self)
         self.mainFrame.grid(row=1, sticky='news')
         
@@ -44,9 +47,11 @@ class fenster(tkinter.Tk):
         
         
     def __create_StatusBar(self):
+        #create the status bar as a Frame
         self.status_bar = tkinter.Frame(self)
         self.status_bar.grid(row=2, sticky='news')
-            
+        
+        #create the Label which represent the status in the status bar
         self.status_bar.status = tkinter.Label(self.status_bar, text='Ready   ', anchor='e')
         self.status_bar.status.pack(side='right')
         
@@ -66,6 +71,7 @@ class fenster(tkinter.Tk):
         
         
     def __create_Toolbar(self):
+        #create the toolbar, from his own class
         self.toolbar = toolbar.toolbar()
         self.toolbar.grid(row=0, sticky='news')
         
