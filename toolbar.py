@@ -4,8 +4,8 @@ import os
 
 class toolbar(tkinter.Frame):
     
-    def __init__(self):
-        super().__init__( bd=1, relief='groove')
+    def __init__(self, master):
+        super().__init__( master, bd=1, relief='groove')
         
         #row- and column configuration for the toolbar
         self.grid_rowconfigure(0,weight=1)

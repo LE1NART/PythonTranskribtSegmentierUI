@@ -1,6 +1,7 @@
 import tkinter
 import menubar
 import toolbar
+import statusbar
 
 class fenster(tkinter.Tk):
     
@@ -40,20 +41,21 @@ class fenster(tkinter.Tk):
     #Private Methode, welche die menubar erzeugt
     def __create_Menu(self):
         #create the menubar
-        self.menubar = menubar.menubar()
+        self.menubar = menubar.menubar(self)
         self.config(menu= self.menubar)
         
-        
-        
+    def __create_Toolbar(self):
+        #create the toolbar, from his own class
+        self.toolbar = toolbar.toolbar(self)
+        self.toolbar.grid(row=0, sticky='news')
+
         
     def __create_StatusBar(self):
         #create the status bar as a Frame
-        self.status_bar = tkinter.Frame(self)
-        self.status_bar.grid(row=2, sticky='news')
+        self.statusbar = statusbar.statusbar(self)
+        self.statusbar.grid(row=2, sticky='news')
         
-        #create the Label which represent the status in the status bar
-        self.status_bar.status = tkinter.Label(self.status_bar, text='Ready   ', anchor='e')
-        self.status_bar.status.pack(side='right')
+        
         
         
     def __create_Scrollbar(self):
@@ -70,8 +72,4 @@ class fenster(tkinter.Tk):
         self.scrollbar.config(command=self.textfield.yview)
         
         
-    def __create_Toolbar(self):
-        #create the toolbar, from his own class
-        self.toolbar = toolbar.toolbar()
-        self.toolbar.grid(row=0, sticky='news')
         
