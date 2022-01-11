@@ -12,7 +12,7 @@ class fenster(tkinter.Tk):
         super().__init__()
         
         #values für das Fenster
-        self.title("My App")
+        self.title("Transkriptionseditor")
         self.geometry("500x300")
         self.minsize(700,500)
         self.resizable(True, True)
@@ -25,11 +25,14 @@ class fenster(tkinter.Tk):
     
         #create all objectives in "private" functions
         self.__Main_Frame()
+        self.__create_StatusBar()
         self.__create_Menu()
         self.__create_Toolbar()
         self.__create_Scrollbar()
         self.__create_Textfield()
-        self.__create_StatusBar()
+        
+        
+        
        
     def __Main_Frame(self):
         #create the mainframe, in the mainframe is the textfield and the scrollbar for the textfield

@@ -7,5 +7,5 @@ class statusbar(tkinter.Frame):
         #create the Label which represent the status in the status bar
         
         
-        self.status = tkinter.Label(self, text='Ready   ', anchor='e')
+        self.status = tkinter.Label(self, text='Ready', anchor='e')
         self.status.pack(side='right')

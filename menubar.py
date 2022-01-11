@@ -15,6 +15,7 @@ class menubar(tkinter.Menu):
         self.__create_segmenu(master)
         self.__create_transmenu(master)
         
+    
         
 
 
@@ -24,10 +25,10 @@ class menubar(tkinter.Menu):
         self.add_cascade(label="Datei", menu=filemenu)
         
         #adding the commands to the filemenu
-        filemenu.add_command(label="Neu") #,command=TODO)
-        filemenu.add_command(label="Öffnen")#, command=TODO)
-        filemenu.add_command(label="Speichern", command=lambda: self.saveFile(master))
-        filemenu.add_command(label="Speichern unter...", command= lambda: self.saveFileUnder(master))
+        filemenu.add_command(label="Neu" ,command=lambda: self.newFile(master), accelerator="Ctrl+n")
+        filemenu.add_command(label="Öffnen", command=lambda: self.openFile(master), accelerator="Ctrl+O")
+        filemenu.add_command(label="Speichern", command=lambda: self.saveFile(master), accelerator="Ctrl+S")
+        filemenu.add_command(label="Speichern unter...", command= lambda: self.saveFileUnder(master), accelerator="Ctrl+Alt+S")
         
     def __create_editmenu(self, master):
         #create the edit menu
@@ -75,12 +76,8 @@ class menubar(tkinter.Menu):
         transmenu.add_command(label="Hilfe")#,command=TODO)
         
         
-    def newFile(self, master):
-        print("Hello")
-        #Todo, aber erst StatusBar neu aufarbeite, sodass Filename etc. in statusbar zwischengelagert werden kann
-        
-        
-    def saveFileUnder(self,master):
+    def saveFileUnder(self,master) -> bool:
+        #es wird ein Boolean zurück gegeben, True wenn das speichern erfolgreich war, False wenn nicht
         try:
             #getting a name path
             text_file = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=(("Text File","*.txt"),("All files", "*.*")))
@@ -94,12 +91,18 @@ class menubar(tkinter.Menu):
                 text_file = open(text_file, 'w')
                 text_file.write(master.textfield.get(1.0,'end'))
                 text_file.close()
+                
+                return True
+                
+            else: raise Error
                
         except Exception as e:
             tkinter.messagebox.showwarning('warning', 'Beim Speichern ist ein unvorhergesehender Fehler aufgetreten.')
-            print(e)
+            print("Error in saveFileUnder: "+str(e))
+            return False
             
-    def saveFile(self,master):
+    def saveFile(self,master) -> bool:
+        #es wird ein Boolean zurück gegeben, True wenn das speichern erfolgreich war, False wenn nicht
         try: #try block für generelle fehler
             #speichert den pfad von eventuellen dateien zwischen aus der statusbar
             status = master.statusbar.status.cget("text").split("Saved: ").pop().replace('/','\\')
@@ -109,12 +112,75 @@ class menubar(tkinter.Menu):
                     text_file = open(status, mode ='w')
                     text_file.write(master.textfield.get(1.0,'end'))
                     text_file.close()
+                    return True
+                    
                 else: raise OSError
             except Exception as e:
-                print(e)
+                print("Error in saveFile: "+str(e))
                 #falls speichern nicht möglich ist, wird speichern unter aufgerufen um neue datei zu erstellen
-                self.saveFileUnder(master)
+                if self.saveFileUnder(master):
+                    return True
+                else: return False
             
         except Exception as e:
             tkinter.messagebox.showwarning('warning', 'Beim Speichern ist ein unvorhergesehender Fehler aufgetreten.')
-            print(e)
+            print("Error in saveFile: "+str(e))
+            return False
+            
+            
+    def newFile(self, master):
+        try:
+            status = master.statusbar.status.cget("text").split("Saved: ").pop().replace('/','\\')
+            #wir überprüfen als erstes ob kein Dateipfad hinterlegt ist.
+            if status == 'Ready':
+                if len(master.textfield.get(1.0,'end'))!=1: #wir schauen ob überhaupt was im textfeld steht
+                    awnser = tkinter.messagebox.askyesno("Speichern", "Wollen Sie speichern?")
+                else: awnser = False
+            else:
+                #wir überprüfen, ob die texte identisch sind, wenn ja muss nicht gespeichert werden.
+                text_file = open(status, mode ='r')
+                text_file_text = text_file.read()
+                text_file.close()
+                if text_file_text == master.textfield.get(1.0,'end'):
+                    awnser = False
+                else:
+                    awnser = tkinter.messagebox.askyesno("Speichern", "Wollen Sie speichern?")
+            
+            if awnser:
+                #wenn ja, dann wird versucht zu speichern, wenn das nicht klappt wird innerhalt der saveFile funtion saveFileUnder aufgerufen
+                if self.saveFile(master):
+                    #wenn das speichern erfolgreich war
+                    master.textfield.delete(1.0,'end')
+                    #update statusbar und Titel
+                    master.statusbar.status.config(text="Ready")
+                    master.title('Transkriptionseditor')
+                else:
+                    return
+            else:
+                #wenne nein, wird nur der textbereich gecleart
+                master.textfield.delete(1.0,'end')
+                #update statusbar und Titel
+                master.statusbar.status.config(text="Ready")
+                master.title('Transkriptionseditor')
+        
+        except Exception as e:
+            tkinter.messagebox.showwarning('warning', 'Beim erstellen ist ein unvorhergesehender Fehler aufgetreten.')
+            print("Error in newFile: "+str(e))
+            
+    def openFile(self, master):
+        try:
+            #wir rufen newFile auf, da uns so das eventuelle abspeichern etc abgenommen wird
+            self.newFile(master)
+            
+            text_file = filedialog.askopenfilename()
+            name = text_file.split("/").pop()
+            master.title(f'{name} - Transkriptionseditor')
+            master.statusbar.status.config(text=f'Saved: {text_file}')
+            text_file = open(text_file, "r")
+            master.textfield.insert(1.0,text_file.read())
+            text_file.close()
+            
+            
+        except Exception as e:
+            tkinter.messagebox.showwarning('warning', 'Beim öffnen ist ein unvorhergesehender Fehler aufgetreten.')
+            print("Error in openFile: "+str(e))
