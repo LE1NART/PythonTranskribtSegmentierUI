@@ -9,8 +9,8 @@ class editmenu(tkinter.Menu):
       
         
         #adding commands to the edit menu
-        self.add_command(label="Rückgängig") #,command=TODO)
-        self.add_command(label="Wiederherstellen") #,command=TODO)
+        self.add_command(label="Rückgängig" ,command=lambda: master.textfield.edit_undo() , accelerator="Crtl+Z")
+        self.add_command(label="Wiederherstellen",command=lambda: master.textfield.edit_redo(), accelerator="Crtl+Y")
         self.add_separator()
         self.add_command(label="Ausschneiden")#,command=TODO)
         self.add_command(label="Kopiere")#,command=TODO)
