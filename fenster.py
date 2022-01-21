@@ -31,6 +31,12 @@ class fenster(tkinter.Tk):
         self.__create_Scrollbar()
         self.__create_Textfield()
         
+        #calling function to set all bindings
+        self.__set_Bindings()
+        
+        #setting focus so the Bindings work from the beginning
+        self.textfield.focus_set()
+        
         
         
        
@@ -74,5 +80,13 @@ class fenster(tkinter.Tk):
         #setting the scrollbar to the textfield viewfield
         self.scrollbar.config(command=self.textfield.yview)
         
+        
+    def __set_Bindings(self):
+        #creating all the bindings for the programm
+        #adding bindings for filemenu
+        self.bind('<Control -n>', lambda event : self.menubar.newFile(self))
+        self.bind('<Control -o>', lambda event : self.menubar.openFile(self))
+        self.bind('<Control -s>', lambda event : self.menubar.saveFile(self))
+        self.bind('<Control - Alt - s>', lambda event : self.menubar.saveFileUnder(self))
         
         

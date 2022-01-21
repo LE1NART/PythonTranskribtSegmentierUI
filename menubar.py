@@ -1,5 +1,6 @@
 import tkinter
 from tkinter import filedialog
+from tkinter import *
 
 import os
 
@@ -15,7 +16,7 @@ class menubar(tkinter.Menu):
         self.__create_segmenu(master)
         self.__create_transmenu(master)
         
-    
+       
         
 
 
@@ -134,7 +135,7 @@ class menubar(tkinter.Menu):
             #wir überprüfen als erstes ob kein Dateipfad hinterlegt ist.
             if status == 'Ready':
                 if len(master.textfield.get(1.0,'end'))!=1: #wir schauen ob überhaupt was im textfeld steht
-                    awnser = tkinter.messagebox.askyesno("Speichern", "Wollen Sie speichern?")
+                    awnser = tkinter.messagebox.askyesnocancel("Speichern", "Wollen Sie speichern?")
                 else: awnser = False
             else:
                 #wir überprüfen, ob die texte identisch sind, wenn ja muss nicht gespeichert werden.
@@ -144,7 +145,7 @@ class menubar(tkinter.Menu):
                 if text_file_text == master.textfield.get(1.0,'end'):
                     awnser = False
                 else:
-                    awnser = tkinter.messagebox.askyesno("Speichern", "Wollen Sie speichern?")
+                    awnser = tkinter.messagebox.askyesnocancel("Speichern", "Wollen Sie speichern?")
             
             if awnser:
                 #wenn ja, dann wird versucht zu speichern, wenn das nicht klappt wird innerhalt der saveFile funtion saveFileUnder aufgerufen
@@ -156,12 +157,15 @@ class menubar(tkinter.Menu):
                     master.title('Transkriptionseditor')
                 else:
                     return
-            else:
-                #wenne nein, wird nur der textbereich gecleart
+            if awnser == False:
+                #wenn nein, wird nur der textbereich gecleart
                 master.textfield.delete(1.0,'end')
                 #update statusbar und Titel
                 master.statusbar.status.config(text="Ready")
                 master.title('Transkriptionseditor')
+            else:
+                #wenn cancel gedrückt wird, dann passiert nichts und der Text bleibt stehen
+                pass
         
         except Exception as e:
             tkinter.messagebox.showwarning('warning', 'Beim erstellen ist ein unvorhergesehender Fehler aufgetreten.')
@@ -184,3 +188,5 @@ class menubar(tkinter.Menu):
         except Exception as e:
             tkinter.messagebox.showwarning('warning', 'Beim öffnen ist ein unvorhergesehender Fehler aufgetreten.')
             print("Error in openFile: "+str(e))
+            
+ 
