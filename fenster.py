@@ -36,6 +36,9 @@ class fenster(tkinter.Tk):
         
         #setting focus so the Bindings work from the beginning
         self.textfield.focus_set()
+
+        #variable für modifieSearch
+        self.mod = 0
         
         
         
@@ -80,6 +83,18 @@ class fenster(tkinter.Tk):
         #setting the scrollbar to the textfield viewfield
         self.scrollbar.config(command=self.textfield.yview)
         
+        #wenn das textfeld bearbeitet wird, dann wir dieses event getriggert
+        self.textfield.bind('<<Modified>>', lambda event: self.modifieSearch())
+        
+    
+    def modifieSearch(self): #wenn das Textfield modifiziert wird, wird diese funktion aufgerufen
+        if self.mod == 0: #die variable benutzen wir, damit es nicht zweimal ausgeführt wird, passiert sonst
+            self.mod = 1
+            if self.menubar.searchmenu.searchwindow: #muss nur gemacht werden, wenn auch das such menü auf ist
+                self.menubar.searchmenu.searchwindow.startButton(self) #es wird erneut gesucht, damit wenn weiter gedrückt wird etc nicht die markierungen für die suche ungenau wird
+            self.textfield.edit_modified(False) #die Modifie flag vom textfield wird auf false gesetzt, weil sonst weitere modifizierungen nicht erkannt werden
+        else:
+            self.mod = 0
         
     def __set_Bindings(self):
         #creating all the bindings for the programm
@@ -88,3 +103,6 @@ class fenster(tkinter.Tk):
         self.bind('<Control -o>', lambda event : self.menubar.filemenu.openFile(self))
         self.bind('<Control -s>', lambda event : self.menubar.filemenu.saveFile(self))
         self.bind('<Control - Alt - s>', lambda event : self.menubar.filemenu.saveFileUnder(self))
+        
+        #adding binding for searchmenu
+        self.bind('<Control -f>', lambda event : self.menubar.searchmenu.create_searchWindow(self.menubar,self))

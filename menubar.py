@@ -28,31 +28,31 @@ class menubar(tkinter.Menu):
 
     def __create_filemenu(self, master):
         #create the first submenu for "Datei"
-        filemenu = file_menu.filemenu(self,master)
-        self.add_cascade(label="Datei", menu=filemenu)
+        self.filemenu = file_menu.filemenu(self,master)
+        self.add_cascade(label="Datei", menu=self.filemenu)
         
     def __create_editmenu(self, master):
         #create the edit menu
-        editmenu = edit_menu.editmenu(self,master)
-        self.add_cascade(label="Bearbeiten", menu=editmenu)
+        self.editmenu = edit_menu.editmenu(self,master)
+        self.add_cascade(label="Bearbeiten", menu=self.editmenu)
         
     def __create_searchmenu(self, master):
         #create the search menu
-        searchmenu = search_menu.searchmenu(self,master)
-        self.add_cascade(label="Suchen", menu=searchmenu)
+        self.searchmenu = search_menu.searchmenu(self,master)
+        self.add_cascade(label="Suchen", menu=self.searchmenu)
        
         
     def __create_segmenu(self, master):
         #ceate the segmentation menu
-        segmenu = seg_menu.segmenu(self,master)
-        self.add_cascade(label="Segmentieren", menu=segmenu)
+        self.segmenu = seg_menu.segmenu(self,master)
+        self.add_cascade(label="Segmentieren", menu=self.segmenu)
       
     
     
     def __create_transmenu(self, master):
         #creating the transcribtion menu
-        transmenu = trans_menu.transmenu(self,master)
-        self.add_cascade(label="Transkription", menu=transmenu)
+        self.transmenu = trans_menu.transmenu(self,master)
+        self.add_cascade(label="Transkription", menu=self.transmenu)
         
        
         

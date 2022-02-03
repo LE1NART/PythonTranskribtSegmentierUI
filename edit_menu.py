@@ -18,23 +18,26 @@ class editmenu(tkinter.Menu):
         self.add_command(label="Löschen",command=lambda: self.__delete(master), accelerator="ENTF")
         self.add_command(label="Alles auswählen",command=lambda: self.__selectAll(master), accelerator="Crtl+A")
         
-        
+    #Ausschneiden    
     def __cut(self,master):
-        self.__copy(master)
-        master.textfield.delete(tkinter.SEL_FIRST,tkinter.SEL_LAST)
-        
+        self.__copy(master) #kopiert
+        self.__delete(master) #löschen
+    
+    #Kopieren
     def __copy(self,master):
-        if master.textfield.selection_get():
-            master.clipboard_clear()
-            master.clipboard_append(master.textfield.selection_get())
+        if master.textfield.selection_get(): #wenn was ausgewählt ist
+            master.clipboard_clear() #clipboard wird gecleart
+            master.clipboard_append(master.textfield.selection_get()) #auswahl wird in das Clipboard gespeichert
             
 
-    
+    #Einfügen
     def __paste(self,master):
-        master.textfield.insert(master.textfield.index(INSERT),master.clipboard_get())
-        
+        master.textfield.insert(master.textfield.index(INSERT),master.clipboard_get()) #aus Clipboard in textfeld
+    
+    #Löschen
     def __delete(self,master):
-        master.textfield.delete(tkinter.SEL_FIRST,tkinter.SEL_LAST)
-       
+        master.textfield.delete(tkinter.SEL_FIRST,tkinter.SEL_LAST) #auswahl wird gelöscht
+    
+    #alles Auswählen
     def __selectAll(self,master):
-        master.textfield.tag_add('sel',1.0,'end')
+        master.textfield.tag_add('sel',1.0,'end') #alles wird ausgewählt
