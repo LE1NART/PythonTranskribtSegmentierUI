@@ -120,7 +120,7 @@ class filemenu(tkinter.Menu):
             name = text_file.split("/").pop()
             master.title(f'{name} - Transkriptionseditor')
             master.statusbar.status.config(text=f'Saved: {text_file}')
-            text_file = open(text_file, "r")
+            text_file = open(text_file, "r",encoding="utf-8")
             master.textfield.insert(1.0,text_file.read())
             text_file.close()
             
