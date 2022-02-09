@@ -35,7 +35,7 @@ class filemenu(tkinter.Menu):
                 
                 return True
                 
-            else: raise Error
+            else: raise Exception
                
         except Exception as e:
             tkinter.messagebox.showwarning('warning', 'Beim Speichern ist ein unvorhergesehender Fehler aufgetreten.')
