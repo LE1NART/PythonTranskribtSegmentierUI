@@ -62,7 +62,7 @@ class segmenu(tkinter.Menu):
                      c1 = r"\b"+l1+" \r"
                      c2 = l+" "
                      text = re.sub(c1 , c2 , text) #r"{}".format(c1) da nicht einfach r c1 oder ähnliches
-
+               #segmentierter text wieder in die datei schreiben
                datei = open(status, 'w')
                datei.write(text)
                datei.close()
@@ -71,9 +71,11 @@ class segmenu(tkinter.Menu):
                #clear the textfield
                master.textfield.delete(1.0, tkinter.END)
 
+               #anpassen des Titels und der Statusbar
                name = status.split("/").pop()
                master.title(f'{name} - Transkriptionseditor')
                master.statusbar.status.config(text=f'Saved: {status}')
+               #kopieren des textes aus der datei wieder in das textfeld
                text_file = open(status, "r",encoding="utf-8")
                master.textfield.insert(1.0,text_file.read())
                text_file.close()           
