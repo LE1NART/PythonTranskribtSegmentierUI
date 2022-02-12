@@ -30,7 +30,7 @@ class segmenu(tkinter.Menu):
          
                status = master.statusbar.status.cget("text").split("Saved: ").pop().replace('/','\\')
 
-               datei = open(status, 'r')
+               datei = open(status, 'r',encoding="utf-8")
                text = datei.read()
                datei.seek(0)
                datei.close()
@@ -63,7 +63,7 @@ class segmenu(tkinter.Menu):
                      c2 = l+" "
                      text = re.sub(c1 , c2 , text) #r"{}".format(c1) da nicht einfach r c1 oder ähnliches
                #segmentierter text wieder in die datei schreiben
-               datei = open(status, 'w')
+               datei = open(status, 'w',encoding="utf-8")
                datei.write(text)
                datei.close()
 

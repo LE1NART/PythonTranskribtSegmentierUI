@@ -97,7 +97,7 @@ class segWindow(tkinter.Toplevel):
             for file in os.listdir(folderpath):
                 try:
                     if file.split('.')[1] == 'txt': #nur txt dateien
-                        datei = open(folderpath+'/'+file, 'r')
+                        datei = open(folderpath+'/'+file, 'r',encoding="utf-8")
                         text = datei.read()
                         datei.seek(0)
                         datei.close()
@@ -128,7 +128,7 @@ class segWindow(tkinter.Toplevel):
                             c2 = l+" "
                             text = re.sub(c1 , c2 , text) #r"{}".format(c1) da nicht einfach r c1 oder ähnliches
 
-                        datei = open(outputfilepath+'/'+file, 'w')
+                        datei = open(outputfilepath+'/'+file, 'w',encoding="utf-8")
                         datei.write(text)
                         datei.close()
                         

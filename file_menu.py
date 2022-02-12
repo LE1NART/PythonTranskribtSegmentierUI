@@ -29,7 +29,7 @@ class filemenu(tkinter.Menu):
                 master.statusbar.status.config(text=f'Saved: {text_file}')
                 
                 #create and open the file
-                text_file = open(text_file, 'w')
+                text_file = open(text_file, 'w',encoding="utf-8")
                 text_file.write(master.textfield.get(1.0,'end'))
                 text_file.close()
                 
@@ -50,7 +50,7 @@ class filemenu(tkinter.Menu):
             try: #try block für das öffnen
                 if os.path.exists(status): #checkt ob es die datei gibt
                     #überschreibt inhalt mit dem aus dem textfeld
-                    text_file = open(status, mode ='w')
+                    text_file = open(status, mode ='w',encoding="utf-8")
                     text_file.write(master.textfield.get(1.0,'end'))
                     text_file.close()
                     return True
@@ -79,7 +79,7 @@ class filemenu(tkinter.Menu):
                 else: awnser = False
             else:
                 #wir überprüfen, ob die texte identisch sind, wenn ja muss nicht gespeichert werden.
-                text_file = open(status, mode ='r')
+                text_file = open(status, mode ='r',encoding="utf-8")
                 text_file_text = text_file.read()
                 text_file.close()
                 if text_file_text == master.textfield.get(1.0,'end'):
@@ -120,7 +120,7 @@ class filemenu(tkinter.Menu):
             name = text_file.split("/").pop()
             master.title(f'{name} - Transkriptionseditor')
             master.statusbar.status.config(text=f'Saved: {text_file}')
-            text_file = open(text_file, "r",encoding="utf-8")
+            text_file = open(text_file, "r")
             master.textfield.insert(1.0,text_file.read())
             text_file.close()
             
