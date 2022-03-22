@@ -41,11 +41,9 @@ class transmenu(tkinter.Menu):
             # recognize (convert from speech to text)
             text = recognizer.recognize_google(audio_data, language='de-DE')
             
-            print(type(text))
+            print(type(text                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ))
             master.textfield.delete(1.0,tkinter.END)
             master.textfield.insert(1.0,text)
-            #datei = open(file.split('.wav')[0]+'.txt', 'w')
-            #datei.write(text)
-            #datei.close()
+            
       else:
          pass

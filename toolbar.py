@@ -1,6 +1,7 @@
 import tkinter
-
 import os
+
+import song_box
 
 class toolbar(tkinter.Frame):
     
@@ -19,11 +20,13 @@ class toolbar(tkinter.Frame):
         self.grid_columnconfigure(7,weight=1000)
         
         #calling functions to create the Buttons and the Slider
-        self.__addButtons()
+        self.__addButtons(master)
         self.__addSlider()
         
-        
-    def __addButtons(self):
+        self.trackBox = None
+        self.trackList = [] #diese Liste dient dazu, dass wir hier und in der SongBox gleichermaßen zugriff auf die Songs haben
+
+    def __addButtons(self,master):
         #adding the Buttons for the MP3 Controll
         
         #saving the Icons to show them the whole time
@@ -33,12 +36,9 @@ class toolbar(tkinter.Frame):
         self.icon_trackback=tkinter.PhotoImage(file=os.path.dirname(os.path.abspath(__file__)) +r'\icons\trackback.png')
         self.icon_tracknext=tkinter.PhotoImage(file=os.path.dirname(os.path.abspath(__file__)) +r'\icons\tracknext.png')
 
-
-        
-        
         
         #creating the tracklist button
-        tracklist = tkinter.Button(self, image=self.icon_tracklist, activebackground="#a6eff7") #,command=TODO)
+        tracklist = tkinter.Button(self, image=self.icon_tracklist, activebackground="#a6eff7" ,command=lambda: self.createTrackBox(master))
         tracklist.grid(row=0, column=0, sticky='w')
 
         #creating the button to going to the track before
@@ -61,3 +61,14 @@ class toolbar(tkinter.Frame):
         
         self.volume.grid(row=0, column=5, sticky='w', padx=5)
         self.playTime.grid(row=0, column=6, sticky='w', padx=5)
+
+
+    def createTrackBox(self,master):
+        if self.trackBox: #check ob das Fenster schon existiert,
+            self.trackBox.lift()#wenn ja, kommt es in den Vordergrund
+        else:
+            self.trackBox = song_box.songBox(self,master) #wenn nicht erzeugt
+
+    #Hier wird der Dateipfad der audio datei der Liste hinzugefügt
+    def addSong(self, audio_file):
+        pass

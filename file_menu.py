@@ -4,6 +4,8 @@ from tkinter import *
 
 import os
 
+#das encoding=utf8 war notwendig, da es durch das Segmentieren sonst zu Problemen kam
+
 class filemenu(tkinter.Menu):
     
     def __init__(self,menu,master):
@@ -116,7 +118,7 @@ class filemenu(tkinter.Menu):
             #wir rufen newFile auf, da uns so das eventuelle abspeichern etc abgenommen wird
             self.newFile(master)
             
-            text_file = filedialog.askopenfilename()
+            text_file = filedialog.askopenfilename(filetypes=[("Text File","*.txt")])
             name = text_file.split("/").pop()
             master.title(f'{name} - Transkriptionseditor')
             master.statusbar.status.config(text=f'Saved: {text_file}')
