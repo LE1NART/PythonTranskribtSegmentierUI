@@ -1,5 +1,6 @@
 import tkinter
 import os
+import pygame
 
 import song_box
 
@@ -24,7 +25,11 @@ class toolbar(tkinter.Frame):
         self.__addSlider()
         
         self.trackBox = None
+        self.trackBoxVis = False
         self.trackList = [] #diese Liste dient dazu, dass wir hier und in der SongBox gleichermaßen zugriff auf die Songs haben
+        self.play = False
+
+        pygame.mixer.init()
 
     def __addButtons(self,master):
         #adding the Buttons for the MP3 Controll
@@ -38,20 +43,20 @@ class toolbar(tkinter.Frame):
 
         
         #creating the tracklist button
-        tracklist = tkinter.Button(self, image=self.icon_tracklist, activebackground="#a6eff7" ,command=lambda: self.createTrackBox(master))
-        tracklist.grid(row=0, column=0, sticky='w')
+        self.tracklist = tkinter.Button(self, image=self.icon_tracklist, activebackground="#a6eff7" ,command=lambda: self.createTrackBox(master))
+        self.tracklist.grid(row=0, column=0, sticky='w')
 
         #creating the button to going to the track before
-        trackback = tkinter.Button(self, image=self.icon_trackback, activebackground="#a6eff7") #,command=TODO)
-        trackback.grid(row=0, column=1, sticky='w', padx=(5,0))
+        self.trackback = tkinter.Button(self, image=self.icon_trackback, activebackground="#a6eff7",command=lambda: self.prevSong())
+        self.trackback.grid(row=0, column=1, sticky='w', padx=(5,0))
         
         #creating the play/pause button
-        pause_play = tkinter.Button(self, image=self.icon_play, activebackground="#a6eff7") #,command=TODO)
-        pause_play.grid(row=0, column=2, sticky='w')
+        self.pause_play = tkinter.Button(self, image=self.icon_play, activebackground="#a6eff7" ,command=lambda: self.playSong())
+        self.pause_play.grid(row=0, column=2, sticky='w')
         
         #creating the next track button
-        tracknext = tkinter.Button(self, image=self.icon_tracknext, activebackground="#a6eff7") #,command=TODO)
-        tracknext.grid(row=0, column=3, sticky='w', padx=(0,5))
+        self.tracknext = tkinter.Button(self, image=self.icon_tracknext, activebackground="#a6eff7",command= lambda: self.nextSong())
+        self.tracknext.grid(row=0, column=3, sticky='w', padx=(0,5))
         
         
     def __addSlider(self):
@@ -62,13 +67,70 @@ class toolbar(tkinter.Frame):
         self.volume.grid(row=0, column=5, sticky='w', padx=5)
         self.playTime.grid(row=0, column=6, sticky='w', padx=5)
 
+        
+
 
     def createTrackBox(self,master):
         if self.trackBox: #check ob das Fenster schon existiert,
-            self.trackBox.lift()#wenn ja, kommt es in den Vordergrund
+            if self.trackBoxVis == False:
+                self.trackBox.deiconify() #wird sichtbar gemacht
+                self.trackBoxVis = True
+                self.trackBox.lift()#wenn ja, kommt es in den Vordergrund
+            else:
+                self.trackBox.lift()
         else:
             self.trackBox = song_box.songBox(self,master) #wenn nicht erzeugt
+            self.trackBoxVis = True
+            for track in self.trackList:
+                self.trackBox.addSong(self,track)
 
     #Hier wird der Dateipfad der audio datei der Liste hinzugefügt
     def addSong(self, audio_file):
-        pass
+        self.trackList.append(audio_file)
+
+    #der Song an der stelle des Indexes wird aus der Liste gelöscht
+    def deleteSong(self,index):
+        self.trackList.pop(index)
+
+    def playSong(self):
+        if self.play == False and pygame.mixer.music.get_pos() > 0:
+            self.play = True
+            self.pause_play.config(image=self.icon_pause)
+            pygame.mixer.music.unpause()
+
+        elif self.play == False:
+            self.play = True
+            self.pause_play.config(image=self.icon_pause)
+            try:
+                self.startSong()
+            except Exception as e:
+                print(e)
+
+
+        elif self.play == True:
+            self.play = False
+            self.pause_play.config(image=self.icon_play)
+            
+            pygame.mixer.music.pause()
+            print(pygame.mixer.music.get_pos())
+
+    def startSong(self):
+        path = self.trackList[self.trackBox.boxList.curselection()[0]]
+        pygame.mixer.music.load(path)
+        pygame.mixer.music.play(loops=0)
+
+    def nextSong(self):
+        self.trackBox.nextSong()
+        self.startSong()
+
+    def prevSong(self):
+        self.trackBox.prevSong()
+        self.startSong()
+
+    def skipBack(self):
+        pos = pygame.mixer.music.get_pos()
+        pygame.mixer.music.set_pos(pos-10)
+    
+    def skipForward(self):
+        pos = pygame.mixer.music.get_pos()
+        pygame.mixer.music.set_pos(pos+10)

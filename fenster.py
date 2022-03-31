@@ -106,3 +106,13 @@ class fenster(tkinter.Tk):
         
         #adding binding for searchmenu
         self.bind('<Control -f>', lambda event : self.menubar.searchmenu.create_searchWindow(self.menubar,self))
+
+        #adding bindings for toolbar
+        self.bind('<Control -space>',lambda event : self.toolbar.playSong())
+        self.bind('<Control -Left>', lambda event : self.toolbar.skipBack())
+        self.bind('<Control -Right>', lambda event : self.toolbar.skipForward())
+
+
+        """ Der Grund, dass da immer noch event hinter dem Lambda steht ist, das hier ein Event getriggert wird
+        und deshalb ein Argument an lambda übergeben wird. Anstatt'event' könnte da auch 'a' stehen. Aber wir müssen sagen,
+        dass lambda ein argument erwartet, sonst wird gemeckert."""
