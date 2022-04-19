@@ -1,6 +1,9 @@
 import tkinter
 import os
-import pygame
+from pygame import mixer
+from pygame.mixer import music
+from mutagen.mp3 import MP3
+from mutagen.wave import WAVE
 
 import song_box
 
@@ -29,7 +32,10 @@ class toolbar(tkinter.Frame):
         self.trackList = [] #diese Liste dient dazu, dass wir hier und in der SongBox gleichermaßen zugriff auf die Songs haben
         self.play = False
 
-        pygame.mixer.init()
+        self.length = 0
+        self.offSet = 0
+
+        mixer.init()
 
     def __addButtons(self,master):
         #adding the Buttons for the MP3 Controll
@@ -93,10 +99,12 @@ class toolbar(tkinter.Frame):
         self.trackList.pop(index)
 
     def playSong(self):
-        if self.play == False and pygame.mixer.music.get_pos() > 0:
+        print(music.get_pos(),flush=True)
+        print(self.length,flush=True)
+        if self.play == False and music.get_pos() > 0:
             self.play = True
             self.pause_play.config(image=self.icon_pause)
-            pygame.mixer.music.unpause()
+            music.unpause()
 
         elif self.play == False:
             self.play = True
@@ -110,14 +118,18 @@ class toolbar(tkinter.Frame):
         elif self.play == True:
             self.play = False
             self.pause_play.config(image=self.icon_play)
-            
-            pygame.mixer.music.pause()
-            print(pygame.mixer.music.get_pos())
+            music.pause()
+            music.get_pos()
 
     def startSong(self):
         path = self.trackList[self.trackBox.boxList.curselection()[0]]
-        pygame.mixer.music.load(path)
-        pygame.mixer.music.play(loops=0)
+        music.load(path)
+        if path.split(".")[1] == "mp3" or path.split(".")[1] == "MP3":
+            self.length = MP3(path).info.length
+        elif path.split(".")[1] == "wav" or path.split(".")[1] == "WAV":
+            self.length = WAVE(path).info.length
+        self.offSet = 0
+        music.play(loops=0)
 
     def nextSong(self):
         self.trackBox.nextSong()
@@ -128,9 +140,22 @@ class toolbar(tkinter.Frame):
         self.startSong()
 
     def skipBack(self):
-        pos = pygame.mixer.music.get_pos()
-        pygame.mixer.music.set_pos(pos-10)
+        pos = music.get_pos()/1000
+        self.offSet = self.offSet+(pos - 10)
+        if self.offSet > 0:
+            music.rewind()
+            music.play(loops=0,start=self.offSet)
+        else:
+            self.offSet = 0
+            self.startSong()
     
     def skipForward(self):
-        pos = pygame.mixer.music.get_pos()
-        pygame.mixer.music.set_pos(pos+10)
+        pos = music.get_pos()/1000
+        self.offSet = self.offSet+(pos+10)
+        if self.offSet < self.length:
+            music.rewind()
+            music.play(loops=0,start=self.offSet)
+        else:
+            self.offSet = self.offSet-10
+            music.rewind()
+            music.play(loops=0,start=self.offSet)

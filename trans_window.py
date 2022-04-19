@@ -3,7 +3,6 @@ import os
 from tkinter import ttk
 from tkinter import filedialog
 import threading
-from pydub import AudioSegment
 import speech_recognition
 
 
@@ -134,18 +133,6 @@ class transWindow(tkinter.Toplevel):
         self.startButton.config(state=tkinter.NORMAL)
         self.ambientNoise.config(state=tkinter.NORMAL)
 
-
-    def __to_wav(self, audio_file):
-        if audio_file.split('.')[1] == 'mp3' or audio_file.split('.')[1] == 'MP3':    
-            sound = AudioSegment.from_mp3(audio_file)
-            audio_file = audio_file.split('.')[0] + '.wav'
-            sound.export(audio_file, format="wav")
-        if audio_file.split('.')[1] == 'm4a':
-            sound = AudioSegment.from_file(audio_file , format='m4a')
-            audio_file = audio_file.split('.')[0] + '.wav'
-            sound.export(audio_file, format="wav")
-        else:
-            pass
 
      #overwrite für das schliesen des fensters
     def __closeWindow(self,menu,master):
