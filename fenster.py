@@ -77,7 +77,7 @@ class fenster(tkinter.Tk):
         
     def __create_Textfield(self):
         #creating the textfield and setting the scrollcommand in the textfield to the scrollbar
-        self.textfield = tkinter.Text(self.mainFrame, undo=True,yscrollcommand=self.scrollbar.set)
+        self.textfield = tkinter.Text(self.mainFrame, undo=True,yscrollcommand=self.scrollbar.set, wrap=tkinter.WORD)
         self.textfield.pack(expand=True,fill="both")
         
         #setting the scrollbar to the textfield viewfield
