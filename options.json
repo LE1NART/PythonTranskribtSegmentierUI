@@ -1,0 +1,32 @@
+{
+  "segmentOptions": {
+    "punktVal": {
+      "id": "punktVal",
+      "value": 1
+    },
+    "kommaVal": {
+      "id": "kommaVal",
+      "value": 1
+    },
+    "undVal": {
+      "id": "undVal",
+      "value": 0
+    },
+    "oderVal": {
+      "id": "oderVal",
+      "value": 0
+    },
+    "klammerVal": {
+      "id": "klammerVal",
+      "value": 0
+    },
+    "abkVal": {
+      "id": "abkVal",
+      "value": 0
+    },
+    "doppelPunktVal": {
+      "id": "doppelPunktVal",
+      "value": 0
+    }
+  }
+}
