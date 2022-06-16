@@ -1,6 +1,6 @@
 import tkinter
 import seg_window
-import opt_window
+import opt_window_seg
 import segmentieren
 
 
@@ -28,7 +28,7 @@ class segmenu(tkinter.Menu):
       if self.optwindow:
          self.optwindow.lift()
       else:
-         self.optwindow = opt_window.optWindow(menu,master)
+         self.optwindow = opt_window_seg.optWindow(menu,master)
 
    def __segment(self,menu,master):
       try: #try block für generelle fehler
